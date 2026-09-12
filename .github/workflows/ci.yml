@@ -53,7 +53,6 @@ jobs:
       - uses: ./
         with:
           toolchain: stable-i686-pc-windows-msvc
-          force-non-host: true
       - name: Check the active toolchain and compiler host
         run: |
           test "$(rustup show active-toolchain)" = "stable-i686-pc-windows-msvc (default)"
