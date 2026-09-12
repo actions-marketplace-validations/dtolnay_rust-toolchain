@@ -18,6 +18,10 @@ inputs:
   components:
     description: Comma-separated list of components to be additionally installed
     required: false
+  force-non-host:
+    description: Allow installing and selecting a toolchain that does not match the host platform
+    required: false
+    default: "false"
 
 outputs:
   cachekey:
@@ -60,6 +64,7 @@ runs:
         echo "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT
         echo "components=$(for c in ${components//,/ }; do echo -n ' --component' $c; done)" >> $GITHUB_OUTPUT
         echo "downgrade=${{steps.parse.outputs.toolchain == 'nightly' && inputs.components && ' --allow-downgrade' || ''}}" >> $GITHUB_OUTPUT
+        echo "force-non-host=${{inputs.force-non-host == 'true' && ' --force-non-host' || ''}}" >> $GITHUB_OUTPUT
       env:
         targets: ${{inputs.targets || inputs.target || ''}}
         components: ${{inputs.components}}
@@ -89,13 +94,13 @@ runs:
       shell: bash
 
     - name: rustup toolchain install ${{steps.parse.outputs.toolchain}}
-      run: rustup toolchain install ${{steps.parse.outputs.toolchain}}${{steps.flags.outputs.targets}}${{steps.flags.outputs.components}} --profile minimal${{steps.flags.outputs.downgrade}} --no-self-update
+      run: rustup toolchain install ${{steps.parse.outputs.toolchain}}${{steps.flags.outputs.targets}}${{steps.flags.outputs.components}} --profile minimal${{steps.flags.outputs.downgrade}} --no-self-update${{steps.flags.outputs.force-non-host}}
       env:
         RUSTUP_PERMIT_COPY_RENAME: 1
       shell: bash
 
     - name: rustup default ${{steps.parse.outputs.toolchain}}
-      run: rustup default ${{steps.parse.outputs.toolchain}}
+      run: rustup default ${{steps.parse.outputs.toolchain}}${{steps.flags.outputs.force-non-host}}
       shell: bash
       continue-on-error: true  # https://github.com/dtolnay/rust-toolchain/issues/127
 

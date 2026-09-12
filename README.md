@@ -53,6 +53,10 @@ All inputs are optional.
   <td><code>components</code></td>
   <td>Comma-separated string of additional components to install e.g. <code>clippy, rustfmt</code></td>
 </tr>
+<tr>
+  <td><code>force-non-host</code></td>
+  <td>Pass <code>--force-non-host</code> to rustup when installing and selecting the default toolchain. Defaults to <code>false</code>. Set to <code>true</code> when intentionally using a non-host toolchain that the host can run.</td>
+</tr>
 </table>
 
 <br>
