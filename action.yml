@@ -18,6 +18,8 @@ inputs:
   components:
     description: Comma-separated list of components to be additionally installed
     required: false
+  # Rustup 1.29.1 requires explicit opt-in for i686 toolchains on x64 Windows.
+  # https://github.com/rust-lang/rustup/pull/4935
   force-non-host:
     description: Allow installing and selecting a toolchain that does not match the host platform
     required: false
