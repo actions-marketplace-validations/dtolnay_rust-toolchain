@@ -89,13 +89,13 @@ runs:
       shell: bash
 
     - name: rustup toolchain install ${{steps.parse.outputs.toolchain}}
-      run: rustup toolchain install ${{steps.parse.outputs.toolchain}}${{steps.flags.outputs.targets}}${{steps.flags.outputs.components}} --profile minimal${{steps.flags.outputs.downgrade}} --no-self-update
+      run: rustup toolchain install ${{steps.parse.outputs.toolchain}}${{steps.flags.outputs.targets}}${{steps.flags.outputs.components}} --profile minimal${{steps.flags.outputs.downgrade}} --no-self-update --force-non-host
       env:
         RUSTUP_PERMIT_COPY_RENAME: 1
       shell: bash
 
     - name: rustup default ${{steps.parse.outputs.toolchain}}
-      run: rustup default ${{steps.parse.outputs.toolchain}}
+      run: rustup default ${{steps.parse.outputs.toolchain}} --force-non-host
       shell: bash
       continue-on-error: true  # https://github.com/dtolnay/rust-toolchain/issues/127
 
